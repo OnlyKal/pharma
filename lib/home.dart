@@ -11,7 +11,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final myProducts = List<String>.generate(1000, (i) => 'Product $i');
-
+  TextEditingController seachProduct = TextEditingController();
+  TextEditingController txtCategorie = TextEditingController();
+  TextEditingController txtdesignation = TextEditingController();
+  TextEditingController txtmontant = TextEditingController();
+  TextEditingController txtdescription = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,10 +30,55 @@ class _HomeState extends State<Home> {
               height: paddingTop(context),
             ),
             Container(
-              height: heigth(context) * 0.08,
-              width: width(context),
-              color: maincolor,
-            ),
+                height: heigth(context) * 0.07,
+                width: width(context),
+                color: maincolor,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // const Icon(Icons.ice_skating),
+                        SizedBox(
+                            width: width(context) * 0.8,
+                            height: heigth(context) * 0.05,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: TextField(
+                                controller: seachProduct,
+                                decoration: const InputDecoration(
+                                    prefixIcon: Icon(
+                                      Icons.search,
+                                      color: Color.fromARGB(213, 189, 182, 182),
+                                    ),
+                                    hintText: "Recherche medicament",
+                                    hintStyle: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 203, 202, 202)),
+                                    // labelText: "Recherche",
+                                    labelStyle: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 171, 167, 167)),
+                                    enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: maincolor)),
+                                    focusedBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: maincolor)),
+                                    border: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: maincolor))),
+                              ),
+                            )),
+                        const IconButton(
+                            onPressed: null,
+                            icon: Icon(
+                              Icons.more_vert_sharp,
+                              color: Colors.white,
+                            ))
+                      ]),
+                )),
             Expanded(
                 child: ListView.builder(
                     padding: EdgeInsets.zero,
@@ -40,10 +89,46 @@ class _HomeState extends State<Home> {
           ],
         ),
       )),
-      floatingActionButton: const FloatingActionButton(
-        onPressed: null,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text(
+                    'NOUVEAU MEDICAMENT',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                  content: SizedBox(
+                    height: heigth(context) * 0.24,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          input(txtCategorie, 'Catégorie'),
+                          input(txtdesignation, 'Désignation'),
+                          input(txtmontant, 'Prix unitaire'),
+                          input(txtdescription, 'Description'),
+                        ],
+                      ),
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        txtCategorie.text = txtdescription.text =
+                            txtmontant.text = txtdescription.text = '';
+                      },
+                      child: const Text(
+                        'Ajouter',
+                        style: TextStyle(color: maincolor, fontSize: 17),
+                      ),
+                    )
+                  ],
+                );
+              });
+        },
         backgroundColor: maincolor,
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -78,19 +163,34 @@ class _HomeState extends State<Home> {
                           size: 22,
                         ),
                       ),
-                      const SizedBox(width: 8,),
+                      const SizedBox(
+                        width: 8,
+                      ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
-                          Text(' PARACETAMOLE',style: TextStyle(fontWeight: FontWeight.w600),),
-                          SizedBox(height: 2,),
-                          Text(' medicament contre la grip....',style: TextStyle(fontWeight: FontWeight.w400,color: Color.fromARGB(255, 111, 156, 164)),)
+                          Text(
+                            ' PARACETAMOLE',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(
+                            height: 2,
+                          ),
+                          Text(
+                            ' medicament contre la grip....',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                color: Color.fromARGB(255, 111, 156, 164)),
+                          )
                         ],
                       )
                     ],
                   ),
-                  const Text(' CDF 2000',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),)
+                  const Text(
+                    ' CDF 2000',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  )
                 ]),
           ),
         ),
@@ -100,5 +200,26 @@ class _HomeState extends State<Home> {
         )
       ],
     );
+  }
+
+  Widget input(controller, hitext) {
+    return Padding(
+        padding: const EdgeInsets.only(left: 0, right: 0),
+        child: TextField(
+          controller: controller,
+          keyboardType: TextInputType.text,
+          decoration: InputDecoration(
+              hintText: hitext,
+              hintStyle: const TextStyle(color: maincolor),
+              // labelText: "Recherche",
+              labelStyle:
+                  const TextStyle(color: Color.fromARGB(255, 171, 167, 167)),
+              enabledBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: maincolor)),
+              focusedBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: maincolor)),
+              border: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: maincolor))),
+        ));
   }
 }
