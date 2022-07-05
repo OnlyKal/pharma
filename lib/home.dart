@@ -16,6 +16,9 @@ class _HomeState extends State<Home> {
   TextEditingController txtdesignation = TextEditingController();
   TextEditingController txtmontant = TextEditingController();
   TextEditingController txtdescription = TextEditingController();
+
+  var _search = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +49,11 @@ class _HomeState extends State<Home> {
                               padding:
                                   const EdgeInsets.only(left: 10, right: 10),
                               child: TextField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    _search = value;
+                                  });
+                                },
                                 controller: seachProduct,
                                 decoration: const InputDecoration(
                                     prefixIcon: Icon(
