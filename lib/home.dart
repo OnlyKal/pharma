@@ -20,6 +20,18 @@ class _HomeState extends State<Home> {
   var _search = '';
 
   @override
+  void initState() {
+    _getMedicament();
+    super.initState();
+  }
+
+  _getMedicament() {
+    Product _product = Product(name: '', price: 0);
+    var data = _product.get();
+    debugPrint(data.toString());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -123,6 +135,7 @@ class _HomeState extends State<Home> {
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {
+                        _addMedicament();
                         txtCategorie.text = txtdescription.text =
                             txtmontant.text = txtdescription.text = '';
                       },
@@ -229,5 +242,16 @@ class _HomeState extends State<Home> {
               border: const UnderlineInputBorder(
                   borderSide: BorderSide(color: maincolor))),
         ));
+  }
+
+  void _addMedicament() async {
+    Product _product = Product(
+        name: txtdesignation.text,
+        price: double.parse(txtmontant.text),
+        description: txtdescription.text,
+        category: txtCategorie.text);
+    _product.addProduit().then((value) {
+      debugPrint(value.toString());
+    });
   }
 }

@@ -6,6 +6,8 @@ class Product{
   final String? description;
   final String? category;
 
+
+
   const Product({
     this.id,
     required this.name,
@@ -31,7 +33,7 @@ class Product{
       'category': category,
     };
   }
-  Future<Map<String, String>> add(){
+  Future<Map<String, String>> addProduit(){
     Db db= Db();
     return db.add("medicament",toMap() );
   }
