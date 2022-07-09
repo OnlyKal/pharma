@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 3,
               ),
               const Text(
-                'Gestion dela logistique medicale',
+                'Gestion de la logistique medicale',
                 style: TextStyle(
                     fontSize: 12,
                     color: Color.fromARGB(255, 6, 202, 183),

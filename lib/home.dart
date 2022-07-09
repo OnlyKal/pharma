@@ -12,7 +12,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final myProducts = List<String>.generate(1000, (i) => 'Product $i');
   TextEditingController seachProduct = TextEditingController();
   TextEditingController txtCategorie = TextEditingController();
   TextEditingController txtdesignation = TextEditingController();
@@ -61,7 +60,6 @@ class _HomeState extends State<Home> {
                                 onChanged: (value) {
                                   setState(() {
                                     _search = value;
-                                    // debugPrint(value);
                                   });
                                 },
                                 controller: seachProduct,
@@ -89,12 +87,7 @@ class _HomeState extends State<Home> {
                                             BorderSide(color: maincolor))),
                               ),
                             )),
-                        const IconButton(
-                            onPressed: null,
-                            icon: Icon(
-                              Icons.more_vert_sharp,
-                              color: Colors.white,
-                            ))
+                        
                       ]),
                 )),
             Expanded(
@@ -113,22 +106,22 @@ class _HomeState extends State<Home> {
                       if (dawa.connectionState == ConnectionState.done) {
                         if (dawa.hasData) {
                           if (dawa.data != null) {
-                             if(dawa.data['type']=='success'){
+                            if (dawa.data['type'] == 'success') {
                               return ListView.builder(
-                                padding: EdgeInsets.zero,
-                                itemCount: dawa.data['message'].length,
-                                itemBuilder: (context, index) {
-                                  List data = dawa.data['message'].toList();
-                                  data.sort((a, b) {
-                                    return a['name']
-                                        .toLowerCase()
-                                        .compareTo(b['name'].toLowerCase());
+                                  padding: EdgeInsets.zero,
+                                  itemCount: dawa.data['message'].length,
+                                  itemBuilder: (context, index) {
+                                    List data = dawa.data['message'].toList();
+                                    data.sort((a, b) {
+                                      return a['name']
+                                          .toLowerCase()
+                                          .compareTo(b['name'].toLowerCase());
+                                    });
+                                    return products(data[index]);
                                   });
-                                  return products(data[index]);
-                                });
-                             }else{
+                            } else {
                               return const Text('Aucun résultat....');
-                             }
+                            }
                           }
                         }
                       }
@@ -153,9 +146,12 @@ class _HomeState extends State<Home> {
                       child: Column(
                         children: [
                           input(txtCategorie, 'Catégorie', TextInputType.text),
-                          input(txtdesignation, 'Désignation', TextInputType.text),
-                          input(txtmontant, 'Prix unitaire',TextInputType.number),
-                          input(txtdescription, 'Description', TextInputType.text),
+                          input(txtdesignation, 'Désignation',
+                              TextInputType.text),
+                          input(txtmontant, 'Prix unitaire',
+                              TextInputType.number),
+                          input(txtdescription, 'Description',
+                              TextInputType.text),
                         ],
                       ),
                     ),
@@ -168,7 +164,12 @@ class _HomeState extends State<Home> {
                         txtCategorie.text = txtdescription.text =
                             txtmontant.text = txtdesignation.text = '';
                         Navigator.pop(context);
-                        Navigator.of(context).pushNamed('/detail');
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Details()),
+                        );
                       },
                       child: const Text(
                         'Ajouter',
@@ -216,7 +217,14 @@ class _HomeState extends State<Home> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(50),
                                       color: maincolor),
-                                  child: Center(child: Text(data['name'][0].toUpperCase(),style: const TextStyle(color: Color.fromARGB(255, 230, 233, 233),fontWeight: FontWeight.bold),))),
+                                  child: Center(
+                                      child: Text(
+                                    data['name'][0].toUpperCase(),
+                                    style: const TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 230, 233, 233),
+                                        fontWeight: FontWeight.bold),
+                                  ))),
                               const SizedBox(
                                 width: 8,
                               ),
@@ -261,12 +269,12 @@ class _HomeState extends State<Home> {
           );
   }
 
-  Widget input(controller, hitext,type) {
+  Widget input(controller, hitext, type) {
     return Padding(
         padding: const EdgeInsets.only(left: 0, right: 0),
         child: TextField(
           controller: controller,
-          keyboardType:type,
+          keyboardType: type,
           decoration: InputDecoration(
               hintText: hitext,
               hintStyle: const TextStyle(color: maincolor),

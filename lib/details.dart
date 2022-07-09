@@ -15,9 +15,14 @@ class _DetailsState extends State<Details> {
   void initState() {
     super.initState();
   }
- _return() {
-      Navigator.of(context).pushNamed('/home');
-    }
+
+  _return() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const Home()),
+    );
+  }
+
   TextEditingController txtCategorie = TextEditingController();
   TextEditingController txtdesignation = TextEditingController();
   TextEditingController txtmontant = TextEditingController();
@@ -31,9 +36,7 @@ class _DetailsState extends State<Details> {
       txtmontant.text = update['price'].toString();
       txtdescription.text = update['description'].toString();
     }
-   
 
-    
     showDialog(
         context: context,
         builder: (context) {
@@ -131,7 +134,10 @@ class _DetailsState extends State<Details> {
         backgroundColor: maincolor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Navigator.of(context).pushNamed('/home'),
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Home()),
+          ),
         ),
       ),
       body: SingleChildScrollView(
