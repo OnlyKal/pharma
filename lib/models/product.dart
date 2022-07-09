@@ -6,10 +6,12 @@ class Product{
   final String? description;
   final String? category;
 
+
+
   const Product({
     this.id,
-    required this.name,
-    required this.price,
+     this.name,
+     this.price,
     this.description,
     this.category
   });
@@ -31,7 +33,7 @@ class Product{
       'category': category,
     };
   }
-  Future<Map<String, String>> add(){
+  Future<Map<String, String>> addProduit(){
     Db db= Db();
     return db.add("medicament",toMap() );
   }
@@ -52,7 +54,7 @@ class Product{
     }
 
   }
-  Object get(){
+  Future get(){
     Db db= Db();
     return db.fetch("SELECT * FROM medicament" );
   }
