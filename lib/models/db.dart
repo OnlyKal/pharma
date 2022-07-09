@@ -2,14 +2,14 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 class Db{
   static final Db instance= Db._instance();
-  static Database _db=Null as Database;
+  static Database database=Null as Database;
   Db._instance();
   /// constructeur null
   Db();
   /// initialisation de la base de donnees
   Future<Database> get db async{
-    _db ??= await createDatabase();
-    return _db;
+    database = await createDatabase();
+    return database;
   }
 
   /// creation de la base de bonnees et ouverture de connection
