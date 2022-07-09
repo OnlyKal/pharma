@@ -13,13 +13,15 @@ class Details extends StatefulWidget {
 class _DetailsState extends State<Details> {
   @override
   void initState() {
-    debugPrint(widget.dawa.toString());
     super.initState();
   }
+
+  final Product _product = const Product();
 
   _openEdit() {
     debugPrint('EDITER');
   }
+
   _openDelete() {
     debugPrint('Supressions');
   }
@@ -34,81 +36,126 @@ class _DetailsState extends State<Details> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Column(children: [
-            Container(
-                color: maincolor,
-                height: heigth(context) * .2,
-                width: width(context),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'ANTIBIOTIQUES',
-                          style: TextStyle(
-                              fontSize: 23,
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 5, 182, 167)),
-                        ),
-                        SizedBox(
-                          height: 6,
-                        ),
-                        Text(
-                          'Paracetamole ',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w300,
-                              color: Colors.white),
-                        ),
-                         SizedBox(
-                          height: 16,
-                        ),
-                        Text(
-                          'CDF 300.0',
-                          style: TextStyle(
-                              fontSize: 23,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ]),
-                )),
-            SizedBox(
-              height: heigth(context) * 0.03,
-            ),
-            const Text(
-                "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy "),
-            SizedBox(
-              height: heigth(context) * 0.03,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                eventBtn(context, _openEdit,'Modifier',Icons.edit),
-                
-                eventBtn(context, _openDelete,'Supprimer',Icons.delete,),
-                
-                eventBtn(context, _openDelete,'Infos',Icons.info),
-              ],
-            )
-          ]),
+          //ooooo
+          child: FutureBuilder<dynamic>(
+              future: widget.dawa==null? _product.getLimit(): _product.getById(widget.dawa['id']) ,
+              builder: (BuildContext context, AsyncSnapshot<dynamic> dawa) {
+                if (dawa.connectionState == ConnectionState.waiting) {
+                  return const Text('waiting data ....');
+                }
+                if (dawa.hasError) {
+                  return const Text('Error data ....');
+                }
+                if (dawa.connectionState == ConnectionState.done) {
+                  if (dawa.hasData) {
+                    if (dawa.data != null) {
+                      return Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              color: maincolor,
+                              height: heigth(context) * .2,
+                              width: width(context),
+                              child: Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  //00000
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          dawa.data['message'][0]["category"]
+                                              .toString(),
+                                          style: const TextStyle(
+                                              fontSize: 23,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color.fromARGB(
+                                                  255, 5, 182, 167)),
+                                        ),
+                                        const SizedBox(
+                                          height: 6,
+                                        ),
+                                        Text(
+                                          dawa.data['message'][0]["name"]
+                                              .toString(),
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w300,
+                                              color: Colors.white),
+                                        ),
+                                        const SizedBox(
+                                          height: 16,
+                                        ),
+                                        Text(
+                                          'CDF ${dawa.data['message'][0]["price"].toString()}',
+                                          style: const TextStyle(
+                                              fontSize: 23,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                        ),
+                                      ])),
+                            ),
+                            SizedBox(
+                              height: heigth(context) * 0.03,
+                            ),
+                            const Text(
+                              'Description',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(255, 149, 149, 149)),
+                            ),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            Text(dawa.data['message'][0]["description"]
+                                .toString()),
+                            SizedBox(
+                              height: heigth(context) * 0.03,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                eventBtn(
+                                    context, _openEdit, 'Modifier', Icons.edit),
+                                eventBtn(
+                                  context,
+                                  _openDelete,
+                                  'Supprimer',
+                                  Icons.delete,
+                                ),
+                                eventBtn(
+                                    context, _openDelete, 'Infos', Icons.info),
+                              ],
+                            )
+                          ]);
+                    }
+                  }
+                }
+
+                return const Text('data ....');
+              }),
+          //000
+          //0000
         ),
       ),
     );
   }
 
-  Widget eventBtn(BuildContext context, event,title,icon) {
+  Widget eventBtn(BuildContext context, event, title, icon) {
     return Column(
       children: [
         IconButton(
           onPressed: event,
-          icon:  Icon(icon, color: maincolor),
+          icon: Icon(icon, color: maincolor),
           hoverColor: maincolor,
         ),
-         Text(
+        Text(
           title,
-          style:const TextStyle(color: Colors.grey),
+          style: const TextStyle(color: Colors.grey),
         )
       ],
     );

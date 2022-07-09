@@ -62,10 +62,10 @@ class Product {
     return db.fetch("SELECT * FROM medicament");
   }
 
-  Future getById() {
+  Future getById(myId) {
     Db db = Db();
     return db.fetch(
-      "SELECT * FROM medicament where id=$id",
+      "SELECT * FROM medicament where id=$myId",
     );
   }
   Future getLike() {

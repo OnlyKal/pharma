@@ -110,8 +110,8 @@ class _HomeState extends State<Home> {
                                 padding: EdgeInsets.zero,
                                 itemCount: dawa.data['message'].length,
                                 itemBuilder: (context, index) {
-                                  debugPrint(
-                                      dawa.data['message'][index].toString());
+                                  // debugPrint(
+                                  //     dawa.data['message'][index].toString());
                                   return products(dawa.data['message'][index]);
                                 });
                           }
@@ -272,7 +272,7 @@ class _HomeState extends State<Home> {
         description: txtdescription.text,
         category: txtCategorie.text);
     _product.addProduit().then((value) {
-      debugPrint(value.toString());
+      // debugPrint(value.toString());
     });
   }
 }
