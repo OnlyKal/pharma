@@ -132,7 +132,6 @@ class _HomeState extends State<Home> {
                           }
                         }
                       }
-
                       return const Text('Aucun résultat ! attente...');
                     }))
           ],
@@ -153,10 +152,10 @@ class _HomeState extends State<Home> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          input(txtCategorie, 'Catégorie'),
-                          input(txtdesignation, 'Désignation'),
-                          input(txtmontant, 'Prix unitaire'),
-                          input(txtdescription, 'Description'),
+                          input(txtCategorie, 'Catégorie', TextInputType.text),
+                          input(txtdesignation, 'Désignation', TextInputType.text),
+                          input(txtmontant, 'Prix unitaire',TextInputType.number),
+                          input(txtdescription, 'Description', TextInputType.text),
                         ],
                       ),
                     ),
@@ -262,12 +261,12 @@ class _HomeState extends State<Home> {
           );
   }
 
-  Widget input(controller, hitext) {
+  Widget input(controller, hitext,type) {
     return Padding(
         padding: const EdgeInsets.only(left: 0, right: 0),
         child: TextField(
           controller: controller,
-          keyboardType: TextInputType.text,
+          keyboardType:type,
           decoration: InputDecoration(
               hintText: hitext,
               hintStyle: const TextStyle(color: maincolor),

@@ -45,10 +45,10 @@ class Product {
     }
   }
 
-  Object delete() {
+  Object delete(myId) {
     Db db = Db();
-    if (id != null) {
-      return db.delete("medicament", 'id=?', [id]);
+    if (myId != null) {
+      return db.delete("medicament", 'id=?', [myId]);
     } else {
       return {
         "type": "failure",
