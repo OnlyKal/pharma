@@ -87,7 +87,6 @@ class _HomeState extends State<Home> {
                                             BorderSide(color: maincolor))),
                               ),
                             )),
-                        
                       ]),
                 )),
             Expanded(
