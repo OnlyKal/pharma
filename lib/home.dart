@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:pharma/color.dart';
 import './export.dart';
@@ -54,9 +56,12 @@ class _HomeState extends State<Home> {
                               padding:
                                   const EdgeInsets.only(left: 10, right: 10),
                               child: TextField(
+                                style: const TextStyle(
+                                    color: Color.fromARGB(255, 190, 190, 190)),
                                 onChanged: (value) {
                                   setState(() {
                                     _search = value;
+                                    // debugPrint(value);
                                   });
                                 },
                                 controller: seachProduct,
@@ -94,31 +99,41 @@ class _HomeState extends State<Home> {
                 )),
             Expanded(
                 child: FutureBuilder<dynamic>(
-                    future: _product.get(),
+                    future: seachProduct.text == ''
+                        ? _product.get()
+                        : _product.getLike(seachProduct.text),
                     builder:
                         (BuildContext context, AsyncSnapshot<dynamic> dawa) {
                       if (dawa.connectionState == ConnectionState.waiting) {
-                        return const Text('waiting data ....');
+                        return const Text('Attente ...');
                       }
                       if (dawa.hasError) {
-                        return const Text('Error data ....');
+                        return const Text('Il y a une erreur...');
                       }
                       if (dawa.connectionState == ConnectionState.done) {
                         if (dawa.hasData) {
                           if (dawa.data != null) {
-                            return ListView.builder(
+                             if(dawa.data['type']=='success'){
+                              return ListView.builder(
                                 padding: EdgeInsets.zero,
                                 itemCount: dawa.data['message'].length,
                                 itemBuilder: (context, index) {
-                                  // debugPrint(
-                                  //     dawa.data['message'][index].toString());
-                                  return products(dawa.data['message'][index]);
+                                  List data = dawa.data['message'].toList();
+                                  data.sort((a, b) {
+                                    return a['name']
+                                        .toLowerCase()
+                                        .compareTo(b['name'].toLowerCase());
+                                  });
+                                  return products(data[index]);
                                 });
+                             }else{
+                              return const Text('Aucun résultat....');
+                             }
                           }
                         }
                       }
 
-                      return const Text('data ....');
+                      return const Text('Aucun résultat ! attente...');
                     }))
           ],
         ),
@@ -172,76 +187,79 @@ class _HomeState extends State<Home> {
   }
 
   Widget products(data) {
-    return GestureDetector(
-      onTap:()=> Navigator.of(context).push(MaterialPageRoute(builder: (context) => Details(dawa: data,))),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: width(context),
-            height: 66,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: maincolor),
-                          child: const Icon(
-                            Icons.abc_rounded,
-                            color: Colors.white,
-                            size: 22,
+    return data == null
+        ? const Text('')
+        : GestureDetector(
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => Details(
+                      dawa: data,
+                    ))),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: width(context),
+                  height: 66,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: maincolor),
+                                  child: Center(child: Text(data['name'][0].toUpperCase(),style: const TextStyle(color: Color.fromARGB(255, 230, 233, 233),fontWeight: FontWeight.bold),))),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data['name'].toString(),
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  const SizedBox(
+                                    height: 2,
+                                  ),
+                                  Text(
+                                    data['category'].toString(),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        color:
+                                            Color.fromARGB(255, 111, 156, 164)),
+                                  )
+                                ],
+                              )
+                            ],
                           ),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              data['category'].toString(),
-                              style: const TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                            const SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              data['name'].toString(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  color: Color.fromARGB(255, 111, 156, 164)),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                    Text(
-                      ' CDF ${data['price'].toString()}',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18),
-                    )
-                  ]),
+                          Text(
+                            ' CDF ${data['price'].toString()}',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          )
+                        ]),
+                  ),
+                ),
+                Container(
+                  height: 0.6,
+                  color: maincolor,
+                )
+              ],
             ),
-          ),
-          Container(
-            height: 0.6,
-            color: maincolor,
-          )
-        ],
-      ),
-    );
+          );
   }
 
   Widget input(controller, hitext) {

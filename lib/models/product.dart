@@ -68,10 +68,10 @@ class Product {
       "SELECT * FROM medicament where id=$myId",
     );
   }
-  Future getLike() {
+  Future getLike(value) {
     Db db = Db();
     return db.fetch(
-      "SELECT * FROM medicament where name like '%$name%'",
+      "SELECT * FROM medicament where name like '%$value%' or category like '%$value%'",
     );
   }
   Future getLimit() {
