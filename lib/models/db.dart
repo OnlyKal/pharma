@@ -11,7 +11,7 @@ class Db {
 
   /// initialisation de la base de donnees
   Future<Database> get db async {
-    _db ??= await createDatabase();
+    _db = await createDatabase();
     return _db;
   }
 

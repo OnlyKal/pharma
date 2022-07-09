@@ -16,19 +16,12 @@ class _HomeState extends State<Home> {
   TextEditingController txtdesignation = TextEditingController();
   TextEditingController txtmontant = TextEditingController();
   TextEditingController txtdescription = TextEditingController();
-
+  final Product _product = const Product();
   var _search = '';
 
   @override
   void initState() {
-    _getMedicament();
     super.initState();
-  }
-
-  _getMedicament() {
-    Product _product = Product(name: '', price: 0);
-    var data = _product.get();
-    debugPrint(data.toString());
   }
 
   @override
@@ -100,11 +93,32 @@ class _HomeState extends State<Home> {
                       ]),
                 )),
             Expanded(
-                child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    itemCount: myProducts.length,
-                    itemBuilder: (context, index) {
-                      return products();
+                child: FutureBuilder<dynamic>(
+                    future: _product.get(),
+                    builder:
+                        (BuildContext context, AsyncSnapshot<dynamic> dawa) {
+                      if (dawa.connectionState == ConnectionState.waiting) {
+                        return const Text('waiting data ....');
+                      }
+                      if (dawa.hasError) {
+                        return const Text('Error data ....');
+                      }
+                      if (dawa.connectionState == ConnectionState.done) {
+                        if (dawa.hasData) {
+                          if (dawa.data != null) {
+                            return ListView.builder(
+                                padding: EdgeInsets.zero,
+                                itemCount: dawa.data['message'].length,
+                                itemBuilder: (context, index) {
+                                  debugPrint(
+                                      dawa.data['message'][index].toString());
+                                  return products(dawa.data['message'][index]);
+                                });
+                          }
+                        }
+                      }
+
+                      return const Text('data ....');
                     }))
           ],
         ),
@@ -136,8 +150,11 @@ class _HomeState extends State<Home> {
                     TextButton(
                       onPressed: () {
                         _addMedicament();
+
                         txtCategorie.text = txtdescription.text =
-                            txtmontant.text = txtdescription.text = '';
+                            txtmontant.text = txtdesignation.text = '';
+                        Navigator.pop(context);
+                        Navigator.of(context).pushNamed('/detail');
                       },
                       child: const Text(
                         'Ajouter',
@@ -154,72 +171,76 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget products() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: width(context),
-          height: 66,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: maincolor),
-                        child: const Icon(
-                          Icons.abc_rounded,
-                          color: Colors.white,
-                          size: 22,
+  Widget products(data) {
+    return GestureDetector(
+      onTap:()=> Navigator.of(context).push(MaterialPageRoute(builder: (context) => Details(dawa: data,))),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: width(context),
+            height: 66,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: maincolor),
+                          child: const Icon(
+                            Icons.abc_rounded,
+                            color: Colors.white,
+                            size: 22,
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            ' PARACETAMOLE',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            height: 2,
-                          ),
-                          Text(
-                            ' medicament contre la grip....',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                color: Color.fromARGB(255, 111, 156, 164)),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                  const Text(
-                    ' CDF 2000',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  )
-                ]),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              data['category'].toString(),
+                              style: const TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              data['name'].toString(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  color: Color.fromARGB(255, 111, 156, 164)),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                    Text(
+                      ' CDF ${data['price'].toString()}',
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18),
+                    )
+                  ]),
+            ),
           ),
-        ),
-        Container(
-          height: 0.6,
-          color: maincolor,
-        )
-      ],
+          Container(
+            height: 0.6,
+            color: maincolor,
+          )
+        ],
+      ),
     );
   }
 
