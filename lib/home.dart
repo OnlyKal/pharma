@@ -38,6 +38,33 @@ class _HomeState extends State<Home> {
             SizedBox(
               height: paddingTop(context),
             ),
+            Padding(
+                padding: const EdgeInsets.only(
+                    left: 10, right: 10, top: 5, bottom: 5),
+                child: Row(
+                  children: [
+                    Container(
+                      height: 40,
+                      width: 40,
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                'assets/images.png',
+                              ),
+                              fit: BoxFit.cover)),
+                    ),
+                    const Text(
+                      'Pharma',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w900, fontSize: 22),
+                    ),
+                    const Text(
+                      'Lab',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w300, fontSize: 22),
+                    ),
+                  ],
+                )),
             Container(
                 height: heigth(context) * 0.07,
                 width: width(context),
@@ -97,10 +124,47 @@ class _HomeState extends State<Home> {
                     builder:
                         (BuildContext context, AsyncSnapshot<dynamic> dawa) {
                       if (dawa.connectionState == ConnectionState.waiting) {
-                        return const Text('Attente ...');
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              SizedBox(
+                                height: 12,
+                                width: 12,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 1,
+                                  backgroundColor: maincolor,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 3,
+                              ),
+                              Text('Attente ...')
+                            ],
+                          ),
+                        );
                       }
                       if (dawa.hasError) {
-                        return const Text('Il y a une erreur...');
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: const [
+                              Icon(
+                                Icons.error,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(
+                                height: 3,
+                              ),
+                              Text('Il ya une erreur ...')
+                            ],
+                          ),
+                        );
                       }
                       if (dawa.connectionState == ConnectionState.done) {
                         if (dawa.hasData) {
@@ -119,12 +183,45 @@ class _HomeState extends State<Home> {
                                     return products(data[index]);
                                   });
                             } else {
-                              return const Text('Aucun résultat....');
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 10, bottom: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    Icon(
+                                      Icons.error,
+                                      color: Colors.grey,
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Text('Aucun résultat trouvé ...')
+                                  ],
+                                ),
+                              );
                             }
                           }
                         }
                       }
-                      return const Text('Aucun résultat ! attente...');
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 10, bottom: 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.error,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Text('Aucun résultat trouvé ...')
+                          ],
+                        ),
+                      );
                     }))
           ],
         ),
@@ -136,8 +233,8 @@ class _HomeState extends State<Home> {
               builder: (context) {
                 return AlertDialog(
                   title: const Text(
-                    'NOUVEAU MEDICAMENT',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    'Ajouter nouveau produit',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   content: SizedBox(
                     height: heigth(context) * 0.24,
@@ -158,6 +255,18 @@ class _HomeState extends State<Home> {
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'ANNULER',
+                        style: TextStyle(
+                            color: maincolor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
                         _addMedicament();
 
                         txtCategorie.text = txtdescription.text =
@@ -171,10 +280,13 @@ class _HomeState extends State<Home> {
                         );
                       },
                       child: const Text(
-                        'Ajouter',
-                        style: TextStyle(color: maincolor, fontSize: 17),
+                        'AJOUTER',
+                        style: TextStyle(
+                            color: maincolor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
                       ),
-                    )
+                    ),
                   ],
                 );
               });

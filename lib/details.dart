@@ -29,6 +29,7 @@ class _DetailsState extends State<Details> {
   TextEditingController txtdescription = TextEditingController();
   final Product _product = const Product();
   var update;
+
   _openEdit() {
     if (update != '') {
       txtCategorie.text = update['category'].toString();
@@ -42,8 +43,8 @@ class _DetailsState extends State<Details> {
         builder: (context) {
           return AlertDialog(
             title: const Text(
-              'MODIFIER MEDICAMENT',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              'Modification du produit',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             content: SizedBox(
               height: heigth(context) * 0.24,
@@ -64,22 +65,25 @@ class _DetailsState extends State<Details> {
                     Navigator.pop(context);
                   },
                   child: const Text(
-                    'Annuler',
-                    style: TextStyle(color: maincolor),
+                    'ANNULER',
+                   style: TextStyle(color: maincolor, fontSize: 17),
                   )),
               TextButton(
                 onPressed: () {
-                  Product updateP = Product(
-                      id: int.parse(_id),
-                      name: txtdesignation.text,
-                      category: txtCategorie.text,
-                      price: double.parse(txtmontant.text),
-                      description: txtdescription.text);
-                  updateP.update();
-                  Navigator.of(context).pushNamed('/detail');
+                  setState(() {
+                    Product updateP = Product(
+                        id: int.parse(_id),
+                        name: txtdesignation.text,
+                        category: txtCategorie.text,
+                        price: double.parse(txtmontant.text),
+                        description: txtdescription.text);
+                    updateP.update();
+                  });
+                  // Navigator.of(context).pushNamed('/detail');
+                  Navigator.of(context).pop();
                 },
                 child: const Text(
-                  'Modifier',
+                  'MODIFIER',
                   style: TextStyle(color: maincolor, fontSize: 17),
                 ),
               )
@@ -274,8 +278,10 @@ class _DetailsState extends State<Details> {
         padding: const EdgeInsets.only(left: 0, right: 0),
         child: TextField(
           controller: controller,
+          
           keyboardType: type,
           decoration: InputDecoration(
+            label: hitext,
               hintText: hitext,
               hintStyle: const TextStyle(color: maincolor),
               // labelText: "Recherche",

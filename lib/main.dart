@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:pharma/color.dart';
 import './export.dart';
 
 void main() {
@@ -43,11 +44,12 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color.fromARGB(255, 2, 70, 64),
+        backgroundColor: Colors.white,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Image.asset('assets/images.png'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -57,14 +59,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextStyle(
                         fontSize: 33,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                        color: maincolor),
                   ),
                   Text(
                     'Lab',
                     style: TextStyle(
                         fontSize: 33,
                         fontWeight: FontWeight.w200,
-                        color: Colors.white),
+                        color: maincolor),
                   ),
                 ],
               ),
@@ -75,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 'Gestion de la logistique medicale',
                 style: TextStyle(
                     fontSize: 12,
-                    color: Color.fromARGB(255, 6, 202, 183),
+                    color: Color.fromARGB(255, 5, 178, 161),
                     fontWeight: FontWeight.w300),
               )
             ],
