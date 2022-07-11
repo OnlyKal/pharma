@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 'Gestion de la logistique medicale',
                 style: TextStyle(
                     fontSize: 12,
-                    color: Color.fromARGB(255, 5, 178, 161),
+                    color: maincolor,
                     fontWeight: FontWeight.w300),
               )
             ],

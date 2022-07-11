@@ -364,7 +364,7 @@ class _HomeState extends State<Home> {
                             ],
                           ),
                           Text(
-                            ' CDF ${data['price'].toString()}',
+                            ' ${data['price'].toString()} FC',
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 18),
                           )

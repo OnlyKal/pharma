@@ -168,7 +168,7 @@ class _DetailsState extends State<Details> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              color: maincolor,
+                            decoration: BoxDecoration(  color: maincolor, borderRadius: BorderRadius.circular(10)),
                               height: heigth(context) * .2,
                               width: width(context),
                               child: Padding(
