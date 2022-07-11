@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:pharma/color.dart';
 import './export.dart';
@@ -18,7 +16,6 @@ class _HomeState extends State<Home> {
   TextEditingController txtmontant = TextEditingController();
   TextEditingController txtdescription = TextEditingController();
   final Product _product = const Product();
-  var _search = '';
 
   @override
   void initState() {
@@ -85,9 +82,7 @@ class _HomeState extends State<Home> {
                                 style: const TextStyle(
                                     color: Color.fromARGB(255, 190, 190, 190)),
                                 onChanged: (value) {
-                                  setState(() {
-                                    _search = value;
-                                  });
+                                  setState(() {});
                                 },
                                 controller: seachProduct,
                                 decoration: const InputDecoration(
@@ -271,13 +266,6 @@ class _HomeState extends State<Home> {
 
                         txtCategorie.text = txtdescription.text =
                             txtmontant.text = txtdesignation.text = '';
-                        Navigator.pop(context);
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Details()),
-                        );
                       },
                       child: const Text(
                         'AJOUTER',
@@ -387,6 +375,7 @@ class _HomeState extends State<Home> {
           controller: controller,
           keyboardType: type,
           decoration: InputDecoration(
+              label: Text(hitext),
               hintText: hitext,
               hintStyle: const TextStyle(color: maincolor),
               // labelText: "Recherche",
@@ -402,13 +391,24 @@ class _HomeState extends State<Home> {
   }
 
   void _addMedicament() async {
-    Product _product = Product(
-        name: txtdesignation.text,
-        price: double.parse(txtmontant.text),
-        description: txtdescription.text,
-        category: txtCategorie.text);
-    _product.addProduit().then((value) {
-      // debugPrint(value.toString());
-    });
+    if (txtCategorie.text != '') {
+      if (txtdesignation.text != '') {
+        if (txtmontant.text != '') {
+          if (txtdescription.text != '') {
+            Product _product = Product(
+                name: txtdesignation.text,
+                price: double.parse(txtmontant.text),
+                description: txtdescription.text,
+                category: txtCategorie.text);
+            _product.addProduit().then((value) {});
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Details()),
+            );
+          }
+        }
+      }
+    }
   }
 }

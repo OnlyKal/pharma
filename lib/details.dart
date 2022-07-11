@@ -134,7 +134,7 @@ class _DetailsState extends State<Details> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Détails'),
+        title: const Text('Détails du produit'),
         backgroundColor: maincolor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
@@ -169,7 +169,7 @@ class _DetailsState extends State<Details> {
                           children: [
                             Container(
                             decoration: BoxDecoration(  color: maincolor, borderRadius: BorderRadius.circular(10)),
-                              height: heigth(context) * .2,
+                              // height: heigth(context) * .2,
                               width: width(context),
                               child: Padding(
                                   padding: const EdgeInsets.all(20),
@@ -281,7 +281,7 @@ class _DetailsState extends State<Details> {
           
           keyboardType: type,
           decoration: InputDecoration(
-            label: hitext,
+            label: Text(hitext),
               hintText: hitext,
               hintStyle: const TextStyle(color: maincolor),
               // labelText: "Recherche",
