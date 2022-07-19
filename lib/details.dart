@@ -23,74 +23,111 @@ class _DetailsState extends State<Details> {
     );
   }
 
-  TextEditingController txtCategorie = TextEditingController();
+  TextEditingController seachProduct = TextEditingController();
   TextEditingController txtdesignation = TextEditingController();
-  TextEditingController txtmontant = TextEditingController();
+  TextEditingController txtpachat = TextEditingController();
+  TextEditingController txtpvente = TextEditingController();
   TextEditingController txtdescription = TextEditingController();
+
   final Product _product = const Product();
   var update;
+  String? _devise;
 
   _openEdit() {
     if (update != '') {
-      txtCategorie.text = update['category'].toString();
       txtdesignation.text = update['name'].toString();
-      txtmontant.text = update['price'].toString();
+      txtpachat.text = update['pachat'].toString();
+      txtpvente.text = update['pvente'].toString();
       txtdescription.text = update['description'].toString();
+      _devise = update['devise'].toString();
     }
 
     showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: const Text(
-              'Modification du produit',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            content: SizedBox(
-              height: heigth(context) * 0.24,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    input(txtCategorie, 'Catégorie', TextInputType.text),
-                    input(txtdesignation, 'Désignation', TextInputType.text),
-                    input(txtmontant, 'Prix unitaire', TextInputType.number),
-                    input(txtdescription, 'Description', TextInputType.text),
-                  ],
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              title: const Text(
+                'Modification du produit',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              content: SizedBox(
+                height: heigth(context) * 0.3,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          RadioListTile(
+                            title: const Text('FC'),
+                            // leading: Radio(
+                            value: 'FC',
+                            groupValue: _devise,
+                            onChanged: (value) {
+                              setState(() {
+                                _devise = value.toString();
+                              });
+                            },
+                          ),
+                          // ),
+                          RadioListTile(
+                            title: const Text('USD'),
+                            // leading: Radio(
+                            value: 'USD',
+                            groupValue: _devise,
+                            onChanged: (value) {
+                              setState(() {
+                                _devise = value.toString();
+                              });
+                            },
+                          ),
+                          // ),
+                        ],
+                      ),
+                      input(txtdesignation, 'Désignation', TextInputType.text),
+                      input(txtpachat, "Prix d'achat", TextInputType.number),
+                      input(txtpvente, 'Prix de vente', TextInputType.number),
+                      input(txtdescription, 'Description', TextInputType.text),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            actions: <Widget>[
-              TextButton(
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      'ANNULER',
+                      style: TextStyle(color: maincolor, fontSize: 17),
+                    )),
+                TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    modifier();
+                    Navigator.of(context).pop();
                   },
                   child: const Text(
-                    'ANNULER',
-                   style: TextStyle(color: maincolor, fontSize: 17),
-                  )),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    Product updateP = Product(
-                        id: int.parse(_id),
-                        name: txtdesignation.text,
-                        category: txtCategorie.text,
-                        price: double.parse(txtmontant.text),
-                        description: txtdescription.text);
-                    updateP.update();
-                  });
-                  // Navigator.of(context).pushNamed('/detail');
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  'MODIFIER',
-                  style: TextStyle(color: maincolor, fontSize: 17),
-                ),
-              )
-            ],
-          );
+                    'MODIFIER',
+                    style: TextStyle(color: maincolor, fontSize: 17),
+                  ),
+                )
+              ],
+            );
+          });
         });
   }
+
+  void modifier() => setState(() {
+        Product updateP = Product(
+            id: int.parse(_id),
+            name: txtdesignation.text,
+            pachat: double.parse(txtpachat.text),
+            pvente: double.parse(txtpvente.text),
+            description: txtdescription.text,
+            devise: _devise);
+        updateP.update();
+      });
 
   var _id = '';
 
@@ -168,12 +205,12 @@ class _DetailsState extends State<Details> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                            decoration: BoxDecoration(  color: maincolor, borderRadius: BorderRadius.circular(10)),
-                              // height: heigth(context) * .2,
+                              decoration: BoxDecoration(
+                                  color: maincolor,
+                                  borderRadius: BorderRadius.circular(10)),
                               width: width(context),
                               child: Padding(
                                   padding: const EdgeInsets.all(20),
-                                  //00000
                                   child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -181,35 +218,79 @@ class _DetailsState extends State<Details> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          dawa.data['message'][0]["category"]
+                                          dawa.data['message'][0]["name"]
                                               .toString(),
                                           style: const TextStyle(
                                               fontSize: 23,
                                               fontWeight: FontWeight.bold,
                                               color: Color.fromARGB(
-                                                  255, 5, 182, 167)),
+                                                  255, 7, 220, 202)),
                                         ),
                                         const SizedBox(
                                           height: 6,
                                         ),
-                                        Text(
-                                          dawa.data['message'][0]["name"]
-                                              .toString(),
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w300,
-                                              color: Colors.white),
-                                        ),
+                                        // Text(
+                                        //   dawa.data['message'][0]["name"]
+                                        //       .toString(),
+                                        //   style: const TextStyle(
+                                        //       fontSize: 14,
+                                        //       fontWeight: FontWeight.w300,
+                                        //       color: Colors.white),
+                                        // ),
                                         const SizedBox(
                                           height: 16,
                                         ),
-                                        Text(
-                                          'CDF ${dawa.data['message'][0]["price"].toString()}',
-                                          style: const TextStyle(
-                                              fontSize: 23,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white),
-                                        ),
+                                        Row(
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                const Text(
+                                                  "Prix achat (PA)",
+                                                  style: TextStyle(
+                                                      color: Color.fromARGB(
+                                                          255, 7, 220, 202)),
+                                                ),
+                                                Text(
+                                                  '${dawa.data['message'][0]["pachat"].toString()} ${dawa.data['message'][0]["devise"].toString()} ',
+                                                  style: const TextStyle(
+                                                      fontSize: 23,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            ),
+                                            SizedBox(
+                                              width: width(context) * 0.1,
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                const Text(
+                                                  "Prix vente (PV)",
+                                                  style: TextStyle(
+                                                      color: Color.fromARGB(
+                                                          255, 7, 220, 202)),
+                                                ),
+                                                Text(
+                                                  ' ${dawa.data['message'][0]["pvente"].toString()} ${dawa.data['message'][0]["devise"].toString()}',
+                                                  style: const TextStyle(
+                                                      fontSize: 23,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.white),
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        )
                                       ])),
                             ),
                             SizedBox(
@@ -278,10 +359,9 @@ class _DetailsState extends State<Details> {
         padding: const EdgeInsets.only(left: 0, right: 0),
         child: TextField(
           controller: controller,
-          
           keyboardType: type,
           decoration: InputDecoration(
-            label: Text(hitext),
+              label: Text(hitext),
               hintText: hitext,
               hintStyle: const TextStyle(color: maincolor),
               // labelText: "Recherche",

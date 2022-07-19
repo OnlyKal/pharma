@@ -3,28 +3,31 @@ import 'package:pharma/models/db.dart';
 class Product {
   final int? id;
   final String? name;
-  final double? price;
+  final double? pachat;
+  final double? pvente;
   final String? description;
-  final String? category;
+  final String? devise;
+
 
   const Product(
-      {this.id, this.name, this.price, this.description, this.category});
+      {this.id, this.name, this.pachat, this.pvente, this.description,this.devise});
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
-      'price': price,
+      'pachat': pachat,
+      'pvente': pvente,
       'description': description,
-      'category': category,
+      'devise': devise,
     };
   }
 
   Map<String, dynamic> toMapWithId() {
     return {
       'name': name,
-      'price': price,
-      'description': description,
-      'category': category,
+      'pachat': pachat,
+       'pvente': pvente,
+      'devise': devise,
     };
   }
 
@@ -71,7 +74,7 @@ class Product {
   Future getLike(value) {
     Db db = Db();
     return db.fetch(
-      "SELECT * FROM medicament where name like '%$value%' or category like '%$value%'",
+      "SELECT * FROM medicament where name like '%$value%'",
     );
   }
   Future getLimit() {

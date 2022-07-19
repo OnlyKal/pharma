@@ -26,7 +26,7 @@ class Db{
   void dbTables(Database database, int version) async {
     /// table configuration general
     await database.execute(
-        'CREATE TABLE medicament(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,price REAL not null, description TEXT NOT NULL, category TEXT NOT NULL );');
+        'CREATE TABLE medicament(id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,pachat REAL not null,pvente REAL not null, description TEXT NOT NULL, devise TEXT NOT NULL );');
   }
 
   /// cette methode [add] permet d'ajouter une nouvelle occurence

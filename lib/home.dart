@@ -11,10 +11,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   TextEditingController seachProduct = TextEditingController();
-  TextEditingController txtCategorie = TextEditingController();
   TextEditingController txtdesignation = TextEditingController();
-  TextEditingController txtmontant = TextEditingController();
+  TextEditingController txtpachat = TextEditingController();
+  TextEditingController txtpvente = TextEditingController();
   TextEditingController txtdescription = TextEditingController();
+  String devise = 'FC';
+
   final Product _product = const Product();
 
   @override
@@ -51,12 +53,12 @@ class _HomeState extends State<Home> {
                               fit: BoxFit.cover)),
                     ),
                     const Text(
-                      'Pharma',
+                      'KARA',
                       style:
                           TextStyle(fontWeight: FontWeight.w900, fontSize: 22),
                     ),
                     const Text(
-                      'Lab',
+                      'PHAR',
                       style:
                           TextStyle(fontWeight: FontWeight.w300, fontSize: 22),
                     ),
@@ -71,7 +73,6 @@ class _HomeState extends State<Home> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // const Icon(Icons.ice_skating),
                         SizedBox(
                             width: width(context) * 0.8,
                             height: heigth(context) * 0.05,
@@ -94,7 +95,6 @@ class _HomeState extends State<Home> {
                                     hintStyle: TextStyle(
                                         color:
                                             Color.fromARGB(255, 203, 202, 202)),
-                                    // labelText: "Recherche",
                                     labelStyle: TextStyle(
                                         color:
                                             Color.fromARGB(255, 171, 167, 167)),
@@ -226,57 +226,89 @@ class _HomeState extends State<Home> {
           showDialog(
               context: context,
               builder: (context) {
-                return AlertDialog(
-                  title: const Text(
-                    'Ajouter nouveau produit',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  content: SizedBox(
-                    height: heigth(context) * 0.24,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          input(txtCategorie, 'Catégorie', TextInputType.text),
-                          input(txtdesignation, 'Désignation',
-                              TextInputType.text),
-                          input(txtmontant, 'Prix unitaire',
-                              TextInputType.number),
-                          input(txtdescription, 'Description',
-                              TextInputType.text),
-                        ],
+                return StatefulBuilder(builder: (context, setState) {
+                  return AlertDialog(
+                    title: const Text(
+                      'Ajouter nouveau produit',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    content: SizedBox(
+                      height: heigth(context) * 0.3,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                RadioListTile(
+                                  title: const Text('FC'),
+                                  // leading: Radio(
+                                  value: 'FC',
+                                  groupValue: devise,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      devise = value.toString();
+                                    });
+                                  },
+                                ),
+                                // ),
+                                RadioListTile(
+                                  title: const Text('USD'),
+                                  // leading: Radio(
+                                  value: 'USD',
+                                  groupValue: devise,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      devise = value.toString();
+                                    });
+                                  },
+                                ),
+                                // ),
+                              ],
+                            ),
+                            input(txtdesignation, 'Désignation',
+                                TextInputType.text),
+                            input(
+                                txtpachat, 'Prix achat', TextInputType.number),
+                            input(
+                                txtpvente, 'Prix vente', TextInputType.number),
+                            input(txtdescription, 'Description',
+                                TextInputType.text),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text(
-                        'ANNULER',
-                        style: TextStyle(
-                            color: maincolor,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          'ANNULER',
+                          style: TextStyle(
+                              color: maincolor,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        _addMedicament();
-
-                        txtCategorie.text = txtdescription.text =
-                            txtmontant.text = txtdesignation.text = '';
-                      },
-                      child: const Text(
-                        'AJOUTER',
-                        style: TextStyle(
-                            color: maincolor,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold),
+                      TextButton(
+                        onPressed: () {
+                          _addMedicament();
+                          txtdescription.text = txtpachat.text =
+                              txtpvente.text = txtdesignation.text = '';
+                        },
+                        child: const Text(
+                          'AJOUTER',
+                          style: TextStyle(
+                              color: maincolor,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                  ],
-                );
+                    ],
+                  );
+                });
               });
         },
         backgroundColor: maincolor,
@@ -334,28 +366,89 @@ class _HomeState extends State<Home> {
                                   Text(
                                     data['name'].toString(),
                                     style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600),
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w700),
                                   ),
                                   const SizedBox(
                                     height: 2,
                                   ),
-                                  Text(
-                                    data['category'].toString(),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w400,
-                                        color:
-                                            Color.fromARGB(255, 111, 156, 164)),
+                                  SizedBox(
+                                    // width: double.infinity
+                                    // width: width(context) * 0.7,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          width: width(context) * .31,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(3),
+                                            color:
+                                                Color.fromARGB(255, 3, 111, 32),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(4),
+                                            child: Row(
+                                              children: [
+                                                const Text(
+                                                  'PA ',
+                                                  style: TextStyle(
+                                                      fontSize: 11,
+                                                      color: Colors.white),
+                                                ),
+                                                Text(
+                                                  " ${data['pachat'].toString()} ${data['devise'].toString()}",
+                                                  style: const TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 4,
+                                        ),
+                                        Container(
+                                          width: width(context) * .31,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(3),
+                                            color: const Color.fromARGB(
+                                                255, 16, 104, 152),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(4),
+                                            child: Row(
+                                              children: [
+                                                const Text(
+                                                  'PV ',
+                                                  style: TextStyle(
+                                                      fontSize: 11,
+                                                      color: Colors.white),
+                                                ),
+                                                Text(
+                                                  " ${data['pvente'].toString()} ${data['devise'].toString()}",
+                                                  style: const TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   )
                                 ],
                               )
                             ],
                           ),
-                          Text(
-                            ' ${data['price'].toString()} FC',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                          )
                         ]),
                   ),
                 ),
@@ -378,7 +471,6 @@ class _HomeState extends State<Home> {
               label: Text(hitext),
               hintText: hitext,
               hintStyle: const TextStyle(color: maincolor),
-              // labelText: "Recherche",
               labelStyle:
                   const TextStyle(color: Color.fromARGB(255, 171, 167, 167)),
               enabledBorder: const UnderlineInputBorder(
@@ -391,15 +483,16 @@ class _HomeState extends State<Home> {
   }
 
   void _addMedicament() async {
-    if (txtCategorie.text != '') {
-      if (txtdesignation.text != '') {
-        if (txtmontant.text != '') {
-          if (txtdescription.text != '') {
+    if (txtdesignation.text != '') {
+      if (txtpachat.text != '') {
+        if (txtdescription.text != '') {
+          if (txtpvente.text != '') {
             Product _product = Product(
                 name: txtdesignation.text,
-                price: double.parse(txtmontant.text),
+                pachat: double.parse(txtpachat.text),
+                pvente: double.parse(txtpvente.text),
                 description: txtdescription.text,
-                category: txtCategorie.text);
+                devise: devise);
             _product.addProduit().then((value) {});
             Navigator.pop(context);
             Navigator.push(

@@ -10,7 +10,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -55,14 +54,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: const [
                   Text(
-                    'Pharma',
+                    'KARA',
                     style: TextStyle(
                         fontSize: 33,
                         fontWeight: FontWeight.bold,
                         color: maincolor),
                   ),
                   Text(
-                    'Lab',
+                    'PHAR',
                     style: TextStyle(
                         fontSize: 33,
                         fontWeight: FontWeight.w200,
